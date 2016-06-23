@@ -16,8 +16,38 @@
 # under the License.
 """Base TestCase for all cratonclient tests."""
 
+import six
+import sys
+
 from oslotest import base
+
+from cratonclient.shell import main
 
 
 class TestCase(base.BaseTestCase):
     """Test case base class for all unit tests."""
+
+
+class ShellTestCase(base.BaseTestCase):
+    """Test case base class for all shell unit tests."""
+
+    def shell(self, arg_str, exitcodes=(0,)):
+        """Main function for exercising the craton shell."""
+        orig_stdout = sys.stdout
+        orig_stderr = sys.stderr
+        try:
+            sys.stdout = six.StringIO()
+            sys.stderr = six.StringIO()
+            main_shell = main.CratonShell()
+            main_shell.main(arg_str.split())
+        except SystemExit:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            self.assertIn(exc_value.code, exitcodes)
+        finally:
+            stdout = sys.stdout.getvalue()
+            sys.stdout.close()
+            sys.stdout = orig_stdout
+            stderr = sys.stderr.getvalue()
+            sys.stderr.close()
+            sys.stderr = orig_stderr
+        return (stdout, stderr)
