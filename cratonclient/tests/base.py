@@ -35,7 +35,7 @@ class ShellTestCase(base.BaseTestCase):
     def shell(self, arg_str, exitcodes=(0,)):
         """Main function for exercising the craton shell."""
         with mock.patch('sys.stdout', new=six.StringIO()) as mock_stdout, \
-             mock.patch('sys.stderr', new=six.StringIO()) as mock_stderr:
+                mock.patch('sys.stderr', new=six.StringIO()) as mock_stderr:
 
             try:
                 main_shell = main.CratonShell()
