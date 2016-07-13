@@ -17,4 +17,4 @@ import pbr.version
 
 
 __version__ = pbr.version.VersionInfo(
-    'cratonclient').version_string()
+    'python-cratonclient').version_string()

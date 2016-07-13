@@ -11,24 +11,14 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-"""Hosts resource and resource manager."""
-from cratonclient import crud
+"""Hosts resource and resource shell wrapper."""
+
+from cratonclient.common import cliutils
 
 
-class Host(crud.Resource):
-    """Representation of a Host."""
-
-    pass
-
-
-class HostManager(crud.CRUDClient):
-    """A manager for hosts."""
-
-    key = 'host'
-    base_path = '/hosts'
-    resource_class = Host
-
-    def list(self, project_id, **kwargs):
-        """Retrieve the list of hosts in a specific project."""
-        kwargs['project'] = str(project_id)
-        super(HostManager, self).list(**kwargs)
+def do_host_list(cs, args):
+    """Print list of hosts which are registered with the Craton service."""
+    params = {}
+    columns = ['id', 'name']
+    hosts = cs.hosts.list(**params)
+    cliutils.print_list(hosts, columns)
